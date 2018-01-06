@@ -6,7 +6,7 @@
 
 This is a step-by-step guide, how to setup *private* Ethereum network. 
 
-We’ll set up network and write two simple JSON-RPC clients in order to communicate with our Ethereum nodes.
+We’ll set up a network and create two simple JSON-RPC clients in order to communicate with our Ethereum nodes.
 
 > Private blockchains: a fully private blockchain is a blockchain where write permissions are kept centralized to one organization. Read permissions may 
 > be public or restricted to an arbitrary extent. Likely applications include database management, auditing, etc internal to a single company, and so 
@@ -20,7 +20,7 @@ I assume you have got hand-on experience with Docker, also you’re knowing Ruby
 
 Copy the source code from my [Github repository.](https://github.com/fishbullet/Ethereum-Private-Network)
 
-Let’s get started from the Docker container creation, here is a Dockerfile for our ethereum nodes, we’ll be using geth:
+Let’s get started from the Docker container, here is the Dockerfile for our ethereum nodes, we’ll use the geth (go-ethereum):
 
 ```Dockerfile
 FROM ubuntu:16.04
@@ -45,7 +45,7 @@ RUN geth init eth_common/genesis.json
 ENTRYPOINT bash
 ```
 
-In order to create *private* network we need a [genesis file](https://github.com/ethereum/go-ethereum/wiki/Private-network#creating-the-genesis-block) whom must be on both nodes(look in the `eth_common/`).
+In order to create *private* network we need the [genesis file](https://github.com/ethereum/go-ethereum/wiki/Private-network#creating-the-genesis-block) which must be on both nodes(look in the `eth_common/`).
 
 To allow nodes to _talk_ to each other, we must create the network between containers, with the `docker network` it’s pretty easy:
 
@@ -73,13 +73,12 @@ eth_user@node_one:~$ ls -a
 eth_user@node_one:~$
 ```
 
-First one is ready(*don’t close terminal*), now second, open an another terminal and run:
+First one are ready(*don’t close terminal*), now second one, open an another terminal and run:
 
 ```bash
 docker run --rm -it -p 8546:8546 --net=ETH node_two
 eth_user@node_two:~$ ls -a
 .  ..  .bash_logout  .bashrc  .ethereum  .profile  eth_common
-# Output omitted
 eth_user@node_two:~$
 ```
 
@@ -88,7 +87,7 @@ Second one is also ready.
 Note about `docker run` command line options:
 
 - `-p 8545:8545`   in the node_one expose the default RPC port of geth.
-- `-p 8546:8546` in the node_two expose port, whom will be used later in geth.
+- `-p 8546:8546` in the node_two expose port, which will be used later in geth.
 - `— net=ETH` is a custom docker network, to allow containers communicate each other(because we’re building the cluster).
 
 Inspect docker network(remember `IPv4Address`, we’ll use it later), run command `docker network inspect ETH`:
@@ -118,7 +117,7 @@ Inspect docker network(remember `IPv4Address`, we’ll use it later), run comman
 ]
 ```
 
-Now we have two docker containers connected each other. Need to generate coinbase account, in order to mine ether we must provide an address [to receive reward for found blocks](http://www.ethdocs.org/en/latest/mining.html#mining-rewards).
+At this point we have two docker containers connected each other. Need to generate coinbase account, in order to mine ether we must provide an address [to receive reward for found blocks](http://www.ethdocs.org/en/latest/mining.html#mining-rewards).
 
 node_one:
 ```bash
@@ -164,14 +163,14 @@ Note about the command line options to `geth`:
 
 - ` — identity` must be unique identifier of the node
 - `— networkid` must be the same on the both nodes
-- `—verbosity` there is many levels `0=silent, 1=error, 2=warn, 3=info, 4=core, 5=debug, 6=detail` (default: 3)
+- `—verbosity` there are many levels `0=silent, 1=error, 2=warn, 3=info, 4=core, 5=debug, 6=detail` (default: 3)
 - `— mine` enable minning
 - `— rpc` enable RPC
 - `— rpcport=8546` change the (default: 8545) RPC port in order to reach container from the host machine
 
-Documentation for all other command line options you can find [here](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)
+The documentation for all other command line options you can find [here](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)
 
-Let’s run some command to check the state of our nodes.
+Let’s run some command and check the state of our nodes.
 
 node_one:
 ```js
@@ -181,7 +180,7 @@ node_one:
 0
 ```
 
-If both commands return zero, don’t worry, the DAG is generated. Wait some time and check again, you must see results(your output might be different):
+If both commands returns zero, don’t worry, the DAG is generated. Wait some time and check again, you must see the result(your output might be different):
 ```js
 > eth.hashrate
 23458
@@ -200,7 +199,7 @@ node_one:
 > admin.nodeInfo.enode
 "enode://2468b878bb87****072fae1362fd3448@[::]:30303"
 ```
-I omit most of the enode, your enode url will be other, except last part `[::]:30303`.
+I omit a most part of the enode, your enode url will be other, except the last part `[::]:30303`.
 - `[::]`  — means localhost, that’s the enode url of node_one.
 
 Let’s get the second enode from another container:
@@ -209,7 +208,7 @@ node_two:
 > admin.nodeInfo.enode
 "enode://4f3c1f87914a68255f9b736aa**ac754d7558ba@[::]:30303"
 ```
-Ok, we have enode urls of both containers, let’s add its to each other. In order to do that, we need container IP address, whom we have from the output of the `docker network inspect ETH` command, `IPv4Address`.
+Ok, at this point we're having enode urls of both containers, let’s add its to each other. In order to do that, we need container IP address, which we have from the output of the `docker network inspect ETH` command, `IPv4Address`.
 
 node_one:
 ```
@@ -375,7 +374,7 @@ NODE_TWO coinbase: 0x648a4b24cf769da5467bf9b008dace89d9f65a80
 NODE_TWO blocknumber: 1533
 NODE_ONE coinbase: 0x718cb4a34cac0fa4e9a37f249340078896b4dfa0
 ```
-We have builded private ethereum network cluster with the script writen on Ruby and Nodejs, those scripts able to communicate with our cluster using JSON-RPC protocol.
+We have builded private ethereum network cluster with the script writen on Ruby and Nodejs, these scripts able to communicate with our cluster using JSON-RPC protocol.
 It’s a good start to create your blockchain project based on Ethereum. 
 
 References:
@@ -383,6 +382,9 @@ References:
 - http://www.ethdocs.org/en/latest/introduction/index.html
 - https://github.com/ethereum/wiki/wiki
 - https://github.com/ethereum/go-ethereum/wiki
+
+### Disclaimer
+> :exclamation: you use the howto at your own risk.. 
 
 <sub>P.S. forgive me my bad English, it’s not my native language.</sub>
 
