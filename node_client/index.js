@@ -27,19 +27,19 @@ setInterval(()=> {
     })
 
   // BlockNumber
-  clientNodeTwo.call({"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1 },
+  clientNodeOne.call({"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1 },
     function(err, res) {
       if (err) console.log(err)
 
-      console.log("NODE TWO block number: " + parseInt(res.result, 16) )
+      console.log("NODE ONE block number: " + parseInt(res.result, 16) )
     })
   
   // Coinbase
-  clientNodeOne.call({"jsonrpc": "2.0", "method": "eth_coinbase", "params": [], "id": 0 },
+  clientNodeTwo.call({"jsonrpc": "2.0", "method": "eth_coinbase", "params": [], "id": 0 },
     function(err, res) {
       if (err) console.log(err)
 
-      console.log("NODE ONE coinbase: " + res.result )
+      console.log("NODE TWO coinbase: " + res.result )
     })
   
   // blockNumber
