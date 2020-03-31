@@ -1,0 +1,9 @@
+node_one:
+    eth_user@node_one:~$ ./eth_common/setup_account
+    -> Address: {...}
+    eth_user@node_one:~$ geth --identity="NODE_ONE" --networkid="500" --verbosity=1 --mine --minerthreads=1 --rpc --rpcaddr 0.0.0.0 console
+
+node_two:
+    eth_user@node_two:~$ ./eth_common/setup_account
+    -> Address: {...}
+    eth_user@node_two:~$ geth --identity="NODE_TWO" --networkid="500" --verbosity=1 --mine --minerthreads=1 --rpc --rpcport=8546 --rpcaddr 0.0.0.0 console
