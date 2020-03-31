@@ -24,8 +24,8 @@ docker build -t node_one .
 
 docker build -t node_two .
 
-docker run --rm -itd -p 8545:8545 --net=ETH node_one
+docker run --rm -itd -p 8545:8545 --net=ETH --name=node_one node_one
 
-docker run --rm -itd -p 8546:8546 --net=ETH node_two
+docker run --rm -itd -p 8546:8546 --net=ETH --name=node_two node_two
 
 cd ..
